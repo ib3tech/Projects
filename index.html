@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeLink | Premium Property Management</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#153554', // Navy
+                        accent: '#d4af37',  // Gold
+                        light: '#f4f4f4',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+        
+        /* CARD HOVER EFFECT */
+        .listing-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* FADE UP ANIMATION */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .modal-open { overflow: hidden; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="logo.jpg" alt="HomeLink" class="h-16 w-auto object-contain">
+            </div>
+
+            <div class="hidden md:flex space-x-10">
+                <button onclick="scrollToSection('portfolio')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Rentals</button>
+                <button onclick="scrollToSection('management')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Management</button>
+                <button onclick="scrollToSection('why')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Locations</button>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="scrollToSection('contact')" class="hidden md:block text-primary font-bold text-xs uppercase tracking-widest border-b-2 border-transparent hover:border-accent transition-all pb-1">
+                    Owner Login
+                </button>
+                <button onclick="scrollToSection('contact')" class="bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
+                    Contact
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative h-[85vh] flex items-center justify-center bg-primary overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center opacity-50" style="background-image: url('mansion2.jpg');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent"></div>
+        
+        <div class="relative max-w-5xl mx-auto px-6 w-full z-10 pt-10 text-center">
+            <div class="text-white mb-12 fade-in-up">
+                <p class="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">Official Partner of Bakaluba Group</p>
+                <h1 class="text-5xl md:text-7xl font-serif mb-6 leading-tight drop-shadow-xl">
+                    Professional Property Management <br/> You Can Trust.
+                </h1>
+                <p class="text-gray-200 text-lg font-light max-w-2xl mx-auto drop-shadow-md">
+                    Connecting diaspora investors with high-quality tenants in Uganda's prime locations.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-2xl p-2 max-w-3xl mx-auto flex flex-col md:flex-row gap-2 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="flex-grow flex items-center px-4 border-b md:border-b-0 md:border-r border-gray-100 py-3 md:py-0">
+                    <i data-lucide="map-pin" class="text-accent w-5 h-5 mr-3"></i>
+                    <select class="w-full bg-transparent text-gray-700 text-sm font-bold outline-none cursor-pointer">
+                        <option>All Neighborhoods</option>
+                        <option>Muyenga</option>
+                        <option>Kampala</option>
+                        <option>Najjera</option>
+                        <option>Kyanja</option>
+                        <option>Mbalwa</option>
+                    </select>
+                </div>
+                <div class="flex-grow flex items-center px-4 py-3 md:py-0">
+                    <i data-lucide="home" class="text-accent w-5 h-5 mr-3"></i>
+                    <select class="w-full bg-transparent text-gray-700 text-sm font-bold outline-none cursor-pointer">
+                        <option>All Property Types</option>
+                        <option>Residential</option>
+                        <option>Commercial</option>
+                        <option>Mixed Use</option>
+                    </select>
+                </div>
+                <button onclick="scrollToSection('portfolio')" class="bg-primary text-white px-8 py-4 font-bold uppercase text-xs tracking-widest hover:bg-accent hover:text-primary transition-all rounded">
+                    Search Rentals
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 fade-in-up">
+                <div>
+                    <h2 class="text-4xl text-primary mb-2">Featured Rentals</h2>
+                    <p class="text-gray-500 text-sm uppercase tracking-[0.2em]">Professionally Managed by HomeLink</p>
+                </div>
+                <a href="#contact" class="hidden md:block text-accent font-bold uppercase text-xs tracking-widest border-b border-accent hover:text-primary transition-colors pb-1">
+                    View All Listings
+                </a>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                </div>
+        </div>
+    </section>
+
+    <section id="management" class="py-24 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl text-primary mb-4">Comprehensive Management</h2>
+                <p class="text-gray-400 text-sm uppercase tracking-[0.2em]">We handle the details, you get the ROI.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-8 border border-gray-100 rounded hover:border-accent transition-colors group">
+                    <i data-lucide="key" class="w-10 h-10 text-primary mb-4 group-hover:text-accent transition-colors"></i>
+                    <h3 class="text-lg font-bold text-primary mb-2">Leasing & Marketing</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">High-quality photography, listing on top portals, and rigorous tenant screening.</p>
+                </div>
+                <div class="p-8 border border-gray-100 rounded hover:border-accent transition-colors group">
+                    <i data-lucide="hammer" class="w-10 h-10 text-primary mb-4 group-hover:text-accent transition-colors"></i>
+                    <h3 class="text-lg font-bold text-primary mb-2">Maintenance</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">24/7 response team and vetted contractors from the Bakaluba group.</p>
+                </div>
+                <div class="p-8 border border-gray-100 rounded hover:border-accent transition-colors group">
+                    <i data-lucide="bar-chart-3" class="w-10 h-10 text-primary mb-4 group-hover:text-accent transition-colors"></i>
+                    <h3 class="text-lg font-bold text-primary mb-2">Accounting</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Online owner portals with real-time financial reporting and direct deposits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl text-primary mb-4">Prime Locations</h2>
+                <p class="text-gray-400 text-sm uppercase tracking-[0.2em]">Explore our key markets</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="relative h-64 rounded overflow-hidden group cursor-pointer" onclick="scrollToSection('portfolio')">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('Mansion.jpg');"></div>
+                    <div class="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-colors"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <h3 class="text-white text-xl font-serif tracking-widest border-b border-white/30 pb-1">MUYENGA</h3>
+                    </div>
+                </div>
+                <div class="relative h-64 rounded overflow-hidden group cursor-pointer" onclick="scrollToSection('portfolio')">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('Kyanja1.jpg');"></div>
+                    <div class="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-colors"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <h3 class="text-white text-xl font-serif tracking-widest border-b border-white/30 pb-1">KYANJA</h3>
+                    </div>
+                </div>
+                <div class="relative h-64 rounded overflow-hidden group cursor-pointer" onclick="scrollToSection('portfolio')">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('Apartments1.jpg');"></div>
+                    <div class="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-colors"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <h3 class="text-white text-xl font-serif tracking-widest border-b border-white/30 pb-1">KAMPALA</h3>
+                    </div>
+                </div>
+                <div class="relative h-64 rounded overflow-hidden group cursor-pointer" onclick="scrollToSection('portfolio')">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('bakalubamall2.png');"></div>
+                    <div class="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-colors"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <h3 class="text-white text-xl font-serif tracking-widest border-b border-white/30 pb-1">MBALWA</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl text-primary mb-4">Expert Insight</h2>
+                <p class="text-gray-400 text-sm uppercase tracking-[0.2em]">Navigating the Market</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="flex flex-col border border-gray-100 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-accent/10 p-2 rounded-full"><i data-lucide="shield-alert" class="w-6 h-6 text-accent"></i></div>
+                        <h3 class="text-xl font-bold text-primary font-serif">Avoiding Rental Scams in Kampala</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        The market is flooded with fake listings. <strong>Never pay cash without a receipt</strong> and verify ownership through the Ministry of Lands. Always work with a registered agent like HomeLink who can guarantee the property's legitimacy before you view it.
+                    </p>
+                    <a href="#contact" onclick="document.querySelector('textarea[name=message]').value='Please send me the full guide on Avoiding Rental Scams.'" class="mt-auto text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:text-accent transition-colors">
+                        Get Full Guide <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="flex flex-col border border-gray-100 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-primary/5 p-2 rounded-full"><i data-lucide="trending-up" class="w-6 h-6 text-primary"></i></div>
+                        <h3 class="text-xl font-bold text-primary font-serif">Why Muyenga Values are Rising</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                        Infrastructure upgrades and its status as a <strong>Diplomatic Security Zone</strong> have spiked demand. Expat rentals in Muyenga now yield 20% higher than surrounding suburbs due to the unique blend of lake views, security, and accessibility to the CBD.
+                    </p>
+                    <a href="#contact" onclick="document.querySelector('textarea[name=message]').value='I am interested in investing in Muyenga. Please send info.'" class="mt-auto text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:text-accent transition-colors">
+                        View Investment Data <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-32 bg-primary text-white">
+        <div class="max-w-4xl mx-auto px-6 text-center fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-serif mb-8">
+                Partner with HomeLink.
+            </h2>
+            <p class="text-gray-300 mb-12 font-light text-lg">
+                Join hundreds of property owners who trust us with their investments.
+            </p>
+            
+            <form name="homelink-contact" method="POST" data-netlify="true" class="max-w-md mx-auto space-y-4 mb-12 bg-white/5 p-8 rounded-lg border border-white/10 text-left">
+                <input type="hidden" name="form-name" value="homelink-contact" />
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" name="name" placeholder="Name" required class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none">
+                    <input type="tel" name="phone" placeholder="Phone" required class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none">
+                </div>
+                <input type="email" name="email" placeholder="Email Address" required class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none">
+                
+                <select name="service_type" id="contact-service" class="w-full bg-white text-gray-900 p-3 rounded text-sm outline-none cursor-pointer">
+                    <option value="Management">I own a property (Management)</option>
+                    <option value="Renting">I am looking to rent</option>
+                    <option value="Other">General Enquiry</option>
+                </select>
+
+                <textarea name="message" id="contact-message" placeholder="Message..." rows="3" class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none"></textarea>
+
+                <button type="submit" class="w-full bg-accent text-primary py-3 font-bold uppercase text-xs tracking-[0.2em] hover:bg-white transition-all rounded shadow-lg mt-2">
+                    Submit Request
+                </button>
+            </form>
+
+            <div class="grid md:grid-cols-2 gap-8 text-sm font-medium border-t border-white/10 pt-12">
+                <div class="text-right border-r border-white/10 pr-8">
+                    <p class="text-accent uppercase text-xs tracking-widest mb-2">Uganda HQ</p>
+                    <p class="mb-1">Bakaluba Mall, Mbalwa</p>
+                    <a href="tel:+256787120863" class="hover:text-accent transition-colors block">+256 787 120863</a>
+                </div>
+                <div class="text-left pl-8">
+                    <p class="text-accent uppercase text-xs tracking-widest mb-2">UK Desk</p>
+                    <a href="tel:+447557931073" class="hover:text-accent transition-colors block">+44 7557 931073</a>
+                    <a href="mailto:homelinkuganda@gmail.com" class="text-xs text-gray-400 hover:text-white transition-colors block mt-1 lowercase">homelinkuganda@gmail.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-primary-900 py-8 border-t border-white/5 bg-[#0f2a42] text-white/40">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest">
+            <p>&copy; 2026 HomeLink Uganda.</p>
+            <p>Professional Property Management</p>
+        </div>
+    </footer>
+
+    <div id="property-modal" class="fixed inset-0 z-50 hidden bg-primary/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white z-50"><i data-lucide="x-circle" class="w-10 h-10"></i></button>
+        <div class="bg-white w-full max-w-7xl h-[90vh] flex flex-col md:flex-row overflow-hidden shadow-2xl rounded-lg">
+            
+            <div class="md:w-3/4 bg-black relative group flex flex-col">
+                <div class="relative flex-grow overflow-hidden">
+                    <img id="modal-img" src="" class="w-full h-full object-contain">
+                    <button onclick="prevImage()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-accent transition-colors"><i data-lucide="chevron-left"></i></button>
+                    <button onclick="nextImage()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-accent transition-colors"><i data-lucide="chevron-right"></i></button>
+                </div>
+                <div class="h-24 bg-black/90 flex gap-2 overflow-x-auto p-2 scrollbar-hide" id="modal-thumbs"></div>
+            </div>
+
+            <div class="md:w-1/4 p-8 bg-white flex flex-col h-full overflow-y-auto">
+                <h2 id="modal-title" class="text-3xl font-serif text-primary mb-2"></h2>
+                
+                <div class="flex items-center justify-between mb-6">
+                    <p id="modal-loc" class="text-accent text-xs font-bold uppercase tracking-widest"></p>
+                    <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Price on Request</span>
+                </div>
+                
+                <p id="modal-desc" class="text-gray-500 leading-relaxed font-light mb-8 text-sm"></p>
+                
+                <div class="aspect-video bg-gray-100 w-full mb-6 rounded overflow-hidden shadow-inner">
+                    <iframe id="modal-video" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <div class="mt-auto">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest mb-2 text-center">Interested?</p>
+                    <a href="#contact" onclick="enquireRent()" class="block w-full text-center bg-primary text-white py-4 font-bold uppercase text-xs tracking-widest hover:bg-accent hover:text-primary transition-colors rounded shadow-lg">
+                        Enquire to Rent / Stay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+        // --- ENHANCED PROJECT DATA ---
+        const projects = [
+            { 
+                title: "Celeste Suites", 
+                loc: "Muyenga", 
+                type: "Luxury Residential",
+                beds: "2-3 Beds",
+                status: "Available",
+                desc: "Full serviced suites with panoramic views. Experience the pinnacle of Muyenga living. Includes pool, gym, and 24/7 security.", 
+                images: ["Celeste1.jpg", "celeste2.jpg", "Celeste3.jpg", "celeste5.jpg"], 
+                video: "Q0scKSTG4uk" 
+            },
+            { 
+                title: "Executive Mansion", 
+                loc: "Muyenga", 
+                type: "Private Residence",
+                beds: "5 Beds",
+                status: "Managed Exclusive", // Implies ownership/control
+                desc: "A stunning standalone family estate featuring sprawling gardens, modern security, and executive finishings.", 
+                images: ["mansion2.jpg", "mansion4.jpg", "mansion5.jpg", "Mansion.jpg"], 
+                video: "fED3yZqmXLg" 
+            },
+            { 
+                title: "Bakaluba Mall", 
+                loc: "Mbalwa", 
+                type: "Commercial",
+                beds: "Office/Retail",
+                status: "Enquire",
+                desc: "Premier shopping and business destination in the heart of Mbalwa. High foot traffic and modern amenities.", 
+                images: ["bakalubamall2.png"], 
+                video: "fED3yZqmXLg" 
+            },
+            { 
+                title: "Three Floor Apts", 
+                loc: "Kampala", 
+                type: "Urban Living",
+                beds: "2 Beds",
+                status: "Available",
+                desc: "Modern, high-yield apartment complex in the heart of the city. Perfect for young professionals and small families.", 
+                images: ["Apartments1.jpg", "apartments2.jpg", "aparments3.jpg", "apartments4.jpg"], 
+                video: "V6gujRbSFpE" 
+            },
+            { 
+                title: "Najjera Residential", 
+                loc: "Najjera", 
+                type: "Family Housing",
+                beds: "3 Beds",
+                status: "Available",
+                desc: "Secure, community-focused living in one of Kampala's fastest growing suburbs. Spacious compounds.", 
+                images: ["Najeera1.jpg", "najeera3.jpg"], 
+                video: "uU6jDnu3xp8" 
+            },
+            { 
+                title: "Kyanja Apartments", 
+                loc: "Kyanja", 
+                type: "Investment",
+                beds: "1-2 Beds",
+                status: "Last Units",
+                desc: "Contemporary design meets affordability. Ideal for young professionals. Tarmac access and secure perimeter.", 
+                images: ["Kyanja1.jpg", "Kyanja2.jpg", "Kyanja3.jpg", "Kyanja4.jpg"], 
+                video: "p5U_Dys8wKA" 
+            }
+        ];
+
+        let currentProject = null;
+        let currentImgIndex = 0;
+
+        const grid = document.getElementById('projects-grid');
+        projects.forEach((p, index) => {
+            const div = document.createElement('div');
+            // HomeRiver Style Listing Card
+            div.className = "listing-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 cursor-pointer fade-in-up";
+            div.style.animationDelay = `${index * 0.15}s`;
+            
+            div.onclick = () => openModal(index);
+            const thumb = p.images[0]; 
+            div.innerHTML = `
+                <div class="h-64 relative overflow-hidden bg-gray-200">
+                    <img src="${thumb}" onerror="this.src='https://placehold.co/600x400?text=Image+Missing'" class="w-full h-full object-cover">
+                    <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-start">
+                        <span class="bg-primary/90 text-white text-[10px] font-bold uppercase px-3 py-1 rounded shadow backdrop-blur-sm">Managed by HomeLink</span>
+                        <span class="bg-accent text-white text-[10px] font-bold uppercase px-3 py-1 rounded shadow">${p.status}</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="text-xl font-bold text-primary font-serif">${p.title}</h3>
+                            <p class="text-xs text-gray-400 uppercase tracking-widest flex items-center mt-1"><i data-lucide="map-pin" class="w-3 h-3 mr-1"></i> ${p.loc}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4 py-4 border-t border-b border-gray-100 my-4 text-sm text-gray-600">
+                        <span class="flex items-center gap-1"><i data-lucide="bed" class="w-4 h-4 text-accent"></i> ${p.beds}</span>
+                        <span class="flex items-center gap-1"><i data-lucide="home" class="w-4 h-4 text-accent"></i> ${p.type}</span>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400">View Details & Tour</span>
+                        <button class="bg-gray-100 text-primary w-8 h-8 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(div);
+        });
+
+        function openModal(index) {
+            currentProject = projects[index];
+            currentImgIndex = 0;
+            document.getElementById('modal-title').innerText = currentProject.title;
+            document.getElementById('modal-loc').innerText = currentProject.loc;
+            document.getElementById('modal-desc').innerText = currentProject.desc;
+            document.getElementById('modal-video').src = "https://www.youtube.com/embed/" + currentProject.video;
+            updateGallery();
+            document.getElementById('property-modal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        function updateGallery() {
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = currentProject.images[currentImgIndex];
+            const thumbContainer = document.getElementById('modal-thumbs');
+            thumbContainer.innerHTML = '';
+            currentProject.images.forEach((img, idx) => {
+                const t = document.createElement('img');
+                t.src = img;
+                t.className = `h-full w-auto object-cover cursor-pointer border-2 rounded-sm ${idx === currentImgIndex ? 'border-accent' : 'border-transparent'} opacity-70 hover:opacity-100 transition-all`;
+                t.onclick = () => { currentImgIndex = idx; updateGallery(); };
+                thumbContainer.appendChild(t);
+            });
+        }
+
+        function nextImage() { currentImgIndex = (currentImgIndex + 1) % currentProject.images.length; updateGallery(); }
+        function prevImage() { currentImgIndex = (currentImgIndex - 1 + currentProject.images.length) % currentProject.images.length; updateGallery(); }
+        
+        function closeModal() {
+            document.getElementById('property-modal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            document.getElementById('modal-video').src = "";
+        }
+
+        function enquireRent() {
+            closeModal();
+            const propertyName = document.getElementById('modal-title').innerText;
+            document.getElementById('contact-service').value = "Renting";
+            document.getElementById('contact-message').value = "I am interested in renting/staying at " + propertyName + ". Please send me more details.";
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('property-modal').classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeModal();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        document.getElementById('property-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
