@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -66,11 +66,22 @@
                 <a href="network.html" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Network</a>
             </div>
 
-            <div class="flex gap-4">
-                <button onclick="scrollToSection('contact')" class="bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
+            <div class="flex items-center gap-3">
+                <button onclick="scrollToSection('contact')" class="hidden sm:block bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
                     Contact
                 </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-primary p-2" aria-label="Menu">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
             </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-1">
+            <button onclick="scrollToSection('portfolio'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Rentals</button>
+            <button onclick="scrollToSection('management'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Management</button>
+            <button onclick="scrollToSection('why'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Locations</button>
+            <a href="network.html" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Network</a>
+            <button onclick="scrollToSection('contact'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-primary">Contact</button>
         </div>
     </nav>
 
@@ -353,6 +364,7 @@
     <script>
         lucide.createIcons();
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         const contactForm = document.getElementById('homelink-contact-form');
         const contactBtn = document.getElementById('contact-submit-btn');
