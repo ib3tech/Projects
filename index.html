@@ -55,20 +55,18 @@
 
     <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="logo.jpg" alt="HomeLink" class="h-16 w-auto object-contain">
+            <div class="flex items-center gap-3 shrink-0">
+                <img src="logo.jpg" alt="HomeLink" class="h-12 w-auto object-contain">
             </div>
 
-            <div class="hidden md:flex space-x-10">
+            <div class="hidden md:flex space-x-8">
                 <button onclick="scrollToSection('portfolio')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Rentals</button>
                 <button onclick="scrollToSection('management')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Management</button>
                 <button onclick="scrollToSection('why')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Locations</button>
+                <a href="network.html" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Network</a>
             </div>
 
             <div class="flex gap-4">
-                <button onclick="scrollToSection('contact')" class="hidden md:block text-primary font-bold text-xs uppercase tracking-widest border-b-2 border-transparent hover:border-accent transition-all pb-1">
-                    Owner Login
-                </button>
                 <button onclick="scrollToSection('contact')" class="bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
                     Contact
                 </button>
@@ -235,6 +233,26 @@
                     <a href="#contact" onclick="document.querySelector('textarea[name=message]').value='I am interested in investing in Muyenga. Please send info.'" class="mt-auto text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:text-accent transition-colors">
                         View Investment Data <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-[#0f2a42] text-white">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+            <div>
+                <p class="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">Introducing HomeLink Network</p>
+                <h2 class="text-3xl md:text-4xl font-serif mb-4 leading-tight">Know someone looking for a place? Get paid for the introduction.</h2>
+                <p class="text-gray-300 text-sm leading-relaxed mb-8 max-w-md">Brokers, property managers, or just someone with a good connection — refer a tenant to any HomeLink vacancy and earn when they move in.</p>
+                <a href="network.html" class="inline-block bg-accent text-primary px-8 py-4 font-bold uppercase text-xs tracking-widest hover:bg-white transition-all rounded shadow-lg">
+                    Explore the Network
+                </a>
+            </div>
+            <div class="flex justify-center">
+                <div style="width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(212,175,55,0.25), transparent 60%), radial-gradient(circle at 50% 50%, #1c4266 0%, #0f2a42 70%, #081b2d 100%); box-shadow: inset -14px -14px 40px rgba(0,0,0,0.5), 0 0 50px rgba(212,175,55,0.15); position: relative;">
+                    <div style="position: absolute; top: 30%; left: 25%; width: 8px; height: 8px; background: #d4af37; border-radius: 50%; box-shadow: 0 0 10px 3px rgba(212,175,55,0.6);"></div>
+                    <div style="position: absolute; top: 55%; left: 65%; width: 8px; height: 8px; background: #d4af37; border-radius: 50%; box-shadow: 0 0 10px 3px rgba(212,175,55,0.6);"></div>
+                    <div style="position: absolute; top: 70%; left: 30%; width: 8px; height: 8px; background: #d4af37; border-radius: 50%; box-shadow: 0 0 10px 3px rgba(212,175,55,0.6);"></div>
                 </div>
             </div>
         </div>
