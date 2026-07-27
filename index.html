@@ -249,7 +249,7 @@
                 Join hundreds of property owners who trust us with their investments.
             </p>
             
-            <form action="https://formspree.io/f/meeyvwrw" method="POST" class="max-w-md mx-auto space-y-4 mb-12 bg-white/5 p-8 rounded-lg border border-white/10 text-left">
+            <form id="homelink-contact-form" action="https://formspree.io/f/meeyvwrw" method="POST" class="max-w-md mx-auto space-y-4 mb-12 bg-white/5 p-8 rounded-lg border border-white/10 text-left">
                 <div class="grid grid-cols-2 gap-4">
                     <input type="text" name="name" placeholder="Name" required class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none">
                     <input type="tel" name="phone" placeholder="Phone" required class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none">
@@ -264,9 +264,10 @@
 
                 <textarea name="message" id="contact-message" placeholder="Message..." rows="3" class="w-full bg-white text-gray-900 p-3 rounded text-sm focus:ring-2 focus:ring-accent outline-none"></textarea>
 
-                <button type="submit" class="w-full bg-accent text-primary py-3 font-bold uppercase text-xs tracking-[0.2em] hover:bg-white transition-all rounded shadow-lg mt-2">
+                <button type="submit" id="contact-submit-btn" class="w-full bg-accent text-primary py-3 font-bold uppercase text-xs tracking-[0.2em] hover:bg-white transition-all rounded shadow-lg mt-2">
                     Submit Request
                 </button>
+                <p id="contact-form-status" class="text-center text-sm pt-2 hidden"></p>
             </form>
 
             <div class="grid md:grid-cols-2 gap-8 text-sm font-medium border-t border-white/10 pt-12">
@@ -331,6 +332,36 @@
     <script>
         lucide.createIcons();
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+        const contactForm = document.getElementById('homelink-contact-form');
+        const contactBtn = document.getElementById('contact-submit-btn');
+        const contactStatus = document.getElementById('contact-form-status');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            contactBtn.disabled = true;
+            contactBtn.innerText = 'Sending...';
+            contactStatus.classList.add('hidden');
+            fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: { 'Accept': 'application/json' }
+            }).then(function(response) {
+                if (response.ok) {
+                    contactForm.reset();
+                    contactStatus.innerText = 'Thank you. Your request has been received and our team will be in touch shortly.';
+                    contactStatus.className = 'text-center text-sm pt-2 text-accent';
+                } else {
+                    contactStatus.innerText = 'Something went wrong. Please try again or call us directly.';
+                    contactStatus.className = 'text-center text-sm pt-2 text-red-300';
+                }
+            }).catch(function() {
+                contactStatus.innerText = 'Something went wrong. Please try again or call us directly.';
+                contactStatus.className = 'text-center text-sm pt-2 text-red-300';
+            }).finally(function() {
+                contactBtn.disabled = false;
+                contactBtn.innerText = 'Submit Request';
+            });
+        });
 
         // --- ENHANCED PROJECT DATA ---
         const projects = [
