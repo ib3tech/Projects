@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeLink Network | Refer. Connect. Earn.</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#153554',
+                        accent: '#d4af37',
+                        light: '#f4f4f4',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .globe-wrap {
+            width: 420px;
+            height: 420px;
+            position: relative;
+        }
+        .globe {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 30%, rgba(212,175,55,0.25), transparent 60%),
+                repeating-linear-gradient(0deg, rgba(212,175,55,0.15) 0px, rgba(212,175,55,0.15) 1px, transparent 1px, transparent 24px),
+                repeating-linear-gradient(90deg, rgba(212,175,55,0.15) 0px, rgba(212,175,55,0.15) 1px, transparent 1px, transparent 24px),
+                radial-gradient(circle at 50% 50%, #1c4266 0%, #0f2a42 70%, #081b2d 100%);
+            box-shadow: inset -20px -20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(212,175,55,0.15);
+            animation: spin 30s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes spin { from { background-position: 0 0, 0 0, 0 0, 0 0; } to { background-position: 0 0, -420px 0, 0 -420px, 0 0; } }
+
+        .node {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #d4af37;
+            border-radius: 50%;
+            box-shadow: 0 0 12px 4px rgba(212,175,55,0.6);
+            animation: pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.6); opacity: 0.6; }
+        }
+
+        .node-label {
+            position: absolute;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #d4af37;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            inset: -30px;
+            border: 1px dashed rgba(212,175,55,0.2);
+            border-radius: 50%;
+            animation: spin-slow 60s linear infinite;
+        }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="logo.jpg" alt="HomeLink" class="h-16 w-auto object-contain">
+            </a>
+            <div class="hidden md:flex space-x-10">
+                <button onclick="scrollToSection('how')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">How It Works</button>
+                <a href="terms.html" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Terms</a>
+                <button onclick="scrollToSection('who')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Who Can Join</button>
+            </div>
+            <button onclick="scrollToSection('join')" class="bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
+                Join the Network
+            </button>
+        </div>
+    </nav>
+
+    <section class="relative bg-primary overflow-hidden py-20 md:py-28">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="text-white fade-in-up">
+                <p class="text-accent text-xs font-bold uppercase tracking-[0.3em] mb-4">HomeLink Network</p>
+                <h1 class="text-4xl md:text-6xl font-serif mb-6 leading-tight">
+                    You know someone. <br/> We'll pay you for it.
+                </h1>
+                <p class="text-gray-300 text-lg font-light mb-10 max-w-lg">
+                    A referral network connecting HomeLink's vacant properties to the people who can fill them — brokers, agents, property managers, or simply someone whose cousin needs a flat. If you can connect a tenant to a home, you earn.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="scrollToSection('join')" class="bg-accent text-primary px-8 py-4 font-bold uppercase text-xs tracking-widest hover:bg-white transition-all rounded shadow-lg">
+                        Join the Network
+                    </button>
+                    <button onclick="scrollToSection('how')" class="border border-white/30 text-white px-8 py-4 font-bold uppercase text-xs tracking-widest hover:border-accent hover:text-accent transition-all rounded">
+                        How It Works
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center relative fade-in-up" style="animation-delay: 0.2s;">
+                <div class="globe-wrap">
+                    <div class="orbit-ring"></div>
+                    <div class="globe"></div>
+                    <div class="node" style="top: 22%; left: 30%;"></div>
+                    <div class="node-label" style="top: 15%; left: 20%;">London</div>
+                    <div class="node" style="top: 55%; left: 62%;"></div>
+                    <div class="node-label" style="top: 60%; left: 66%;">Kampala</div>
+                    <div class="node" style="top: 40%; left: 78%;"></div>
+                    <div class="node-label" style="top: 32%; left: 80%;">Dubai</div>
+                    <div class="node" style="top: 70%; left: 25%;"></div>
+                    <div class="node-label" style="top: 76%; left: 12%;">Toronto</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="who" class="py-24 bg-white border-b border-gray-100">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl text-primary mb-4">This isn't just for brokers.</h2>
+            <p class="text-gray-500 text-sm uppercase tracking-[0.2em] mb-16">Anyone with a connection is welcome</p>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="p-6 border border-gray-100 rounded hover:border-accent transition-colors">
+                    <i data-lucide="briefcase" class="w-8 h-8 text-primary mb-3 mx-auto"></i>
+                    <h3 class="font-bold text-primary text-sm mb-1">Registered Brokers</h3>
+                    <p class="text-gray-500 text-xs leading-relaxed">Full access to the live vacancy feed.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded hover:border-accent transition-colors">
+                    <i data-lucide="building-2" class="w-8 h-8 text-primary mb-3 mx-auto"></i>
+                    <h3 class="font-bold text-primary text-sm mb-1">Property Managers</h3>
+                    <p class="text-gray-500 text-xs leading-relaxed">Cross-list your own vacancies through us.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded hover:border-accent transition-colors">
+                    <i data-lucide="users" class="w-8 h-8 text-primary mb-3 mx-auto"></i>
+                    <h3 class="font-bold text-primary text-sm mb-1">Diaspora Connectors</h3>
+                    <p class="text-gray-500 text-xs leading-relaxed">Know a family looking to move? Refer them.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded hover:border-accent transition-colors">
+                    <i data-lucide="store" class="w-8 h-8 text-primary mb-3 mx-auto"></i>
+                    <h3 class="font-bold text-primary text-sm mb-1">Anyone, Really</h3>
+                    <p class="text-gray-500 text-xs leading-relaxed">A vacant mall unit, an empty flat — if you know a fit, refer it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how" class="py-24 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl text-primary mb-4">How the network works</h2>
+                <p class="text-gray-400 text-sm uppercase tracking-[0.2em]">Three steps from vacancy to payout</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <span class="text-accent font-serif text-4xl">01</span>
+                    <h3 class="text-lg font-bold text-primary mt-4 mb-2">Join the Network</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Pay a one-time access fee to unlock HomeLink's live feed of vacant apartments, units, and commercial spaces across Uganda.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <span class="text-accent font-serif text-4xl">02</span>
+                    <h3 class="text-lg font-bold text-primary mt-4 mb-2">Connect a Tenant</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Refer anyone you know who's looking — a client, a friend, a family member relocating. We handle viewings, vetting, and the paperwork.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+                    <span class="text-accent font-serif text-4xl">03</span>
+                    <h3 class="text-lg font-bold text-primary mt-4 mb-2">Get Paid on Move-In</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Once your referral signs and moves in, you get paid. Full fee schedule is laid out in the Network Agreement when you join.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="join" class="py-24 bg-white">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl text-primary mb-4">Ready to join?</h2>
+            <p class="text-gray-500 mb-12">Tell us a bit about yourself and we'll be in touch with next steps and payment details.</p>
+
+            <form id="network-form" action="https://formspree.io/f/mjgnjqkg" method="POST" class="space-y-4 text-left bg-gray-50 p-8 rounded-lg border border-gray-100">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" name="name" placeholder="Full Name" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
+                    <input type="tel" name="phone" placeholder="Phone" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
+                </div>
+                <input type="email" name="email" placeholder="Email Address" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
+
+                <select name="connector_type" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 outline-none cursor-pointer">
+                    <option value="Broker/Agent">I'm a registered broker or agent</option>
+                    <option value="Property Manager">I manage properties</option>
+                    <option value="Individual Connector">I just know someone looking to rent</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <textarea name="message" placeholder="Tell us who you know or what space you have in mind..." rows="3" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none"></textarea>
+
+                <button type="submit" id="network-submit-btn" class="w-full bg-primary text-white py-4 font-bold uppercase text-xs tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded shadow-lg mt-2">
+                    Request to Join
+                </button>
+                <p id="network-form-status" class="text-center text-sm pt-2 hidden"></p>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-[#0f2a42] py-8 border-t border-white/5 text-white/40">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest">
+            <p>&copy; 2026 HomeLink Uganda.</p>
+            <div class="flex gap-6">
+                <a href="terms.html" class="hover:text-white transition-colors">Terms & Conditions</a>
+                <a href="index.html" class="hover:text-white transition-colors">Back to Main Site</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+        const networkForm = document.getElementById('network-form');
+        const networkBtn = document.getElementById('network-submit-btn');
+        const networkStatus = document.getElementById('network-form-status');
+        networkForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            networkBtn.disabled = true;
+            networkBtn.innerText = 'Sending...';
+            networkStatus.classList.add('hidden');
+            fetch(networkForm.action, {
+                method: 'POST',
+                body: new FormData(networkForm),
+                headers: { 'Accept': 'application/json' }
+            }).then(function(response) {
+                if (response.ok) {
+                    networkForm.reset();
+                    networkStatus.innerText = 'Thank you. We will review your details and reach out with next steps.';
+                    networkStatus.className = 'text-center text-sm pt-2 text-primary font-medium';
+                } else {
+                    networkStatus.innerText = 'Something went wrong. Please try again or contact us directly.';
+                    networkStatus.className = 'text-center text-sm pt-2 text-red-600';
+                }
+            }).catch(function() {
+                networkStatus.innerText = 'Something went wrong. Please try again or contact us directly.';
+                networkStatus.className = 'text-center text-sm pt-2 text-red-600';
+            }).finally(function() {
+                networkBtn.disabled = false;
+                networkBtn.innerText = 'Request to Join';
+            });
+        });
+    </script>
+</body>
+</html>
