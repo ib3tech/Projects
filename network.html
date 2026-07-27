@@ -104,9 +104,21 @@
                 <a href="terms.html" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Terms</a>
                 <button onclick="scrollToSection('who')" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 hover:text-primary transition-colors">Who Can Join</button>
             </div>
-            <button onclick="scrollToSection('join')" class="bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
-                Join the Network
-            </button>
+            <div class="flex items-center gap-3">
+                <button onclick="scrollToSection('join')" class="hidden sm:block bg-primary text-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded-sm shadow-md">
+                    Join the Network
+                </button>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-primary p-2" aria-label="Menu">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-1">
+            <button onclick="scrollToSection('how'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">How It Works</button>
+            <a href="terms.html" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Terms</a>
+            <button onclick="scrollToSection('who'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-gray-600 border-b border-gray-50">Who Can Join</button>
+            <button onclick="scrollToSection('join'); toggleMobileMenu();" class="block w-full text-left py-3 text-sm font-bold uppercase tracking-[0.1em] text-primary">Join the Network</button>
         </div>
     </nav>
 
@@ -246,6 +258,7 @@
     <script>
         lucide.createIcons();
         function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         const networkForm = document.getElementById('network-form');
         const networkBtn = document.getElementById('network-submit-btn');
