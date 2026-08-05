@@ -218,28 +218,38 @@
 
     <section id="join" class="py-24 bg-white">
         <div class="max-w-2xl mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-4xl text-primary mb-4">Ready to join?</h2>
-            <p class="text-gray-500 mb-12">Tell us a bit about yourself and we'll be in touch with next steps and payment details.</p>
+            <h2 class="text-3xl md:text-4xl text-primary mb-4">Get early access</h2>
+            <p class="text-gray-500 mb-10">Takes under a minute. We review every application personally.</p>
 
-            <form id="network-form" action="https://formspree.io/f/mjgnjqkg" method="POST" class="space-y-4 text-left bg-gray-50 p-8 rounded-lg border border-gray-100">
+            <form id="network-form" action="https://formspree.io/f/mjgnjqkg" method="POST" class="space-y-5 text-left bg-gray-50 p-8 rounded-lg border border-gray-100">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="text" name="name" placeholder="Full Name" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
-                    <input type="tel" name="phone" placeholder="Phone" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
+                    <input id="network-name" type="text" name="name" placeholder="Full Name" required autocomplete="name" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none transition-shadow">
+                    <input type="tel" name="phone" placeholder="Phone" required autocomplete="tel" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none transition-shadow">
                 </div>
-                <input type="email" name="email" placeholder="Email Address" required class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none">
+                <input type="email" name="email" placeholder="Email Address" required autocomplete="email" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none transition-shadow">
 
-                <select name="connector_type" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 outline-none cursor-pointer">
-                    <option value="Broker/Agent">I'm a registered broker or agent</option>
-                    <option value="Property Manager">I manage properties</option>
-                    <option value="Individual Connector">I just know someone looking to rent</option>
-                    <option value="Other">Other</option>
-                </select>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Which describes you best?</p>
+                    <input type="hidden" name="connector_type" id="connector_type" value="">
+                    <div class="grid grid-cols-2 gap-2" id="connector-pills">
+                        <button type="button" data-value="Broker/Agent" class="connector-pill text-left p-3 rounded border border-gray-200 bg-white text-sm text-gray-700 hover:border-accent transition-all">Registered broker / agent</button>
+                        <button type="button" data-value="Property Manager" class="connector-pill text-left p-3 rounded border border-gray-200 bg-white text-sm text-gray-700 hover:border-accent transition-all">I manage properties</button>
+                        <button type="button" data-value="Individual Connector" class="connector-pill text-left p-3 rounded border border-gray-200 bg-white text-sm text-gray-700 hover:border-accent transition-all">I know someone looking</button>
+                        <button type="button" data-value="Other" class="connector-pill text-left p-3 rounded border border-gray-200 bg-white text-sm text-gray-700 hover:border-accent transition-all">Other</button>
+                    </div>
+                </div>
 
-                <textarea name="message" placeholder="Tell us who you know or what space you have in mind..." rows="3" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none"></textarea>
+                <textarea name="message" placeholder="Tell us who you know or what space you have in mind... (optional)" rows="3" class="w-full bg-white text-gray-900 p-3 rounded text-sm border border-gray-200 focus:ring-2 focus:ring-accent outline-none transition-shadow"></textarea>
 
-                <button type="submit" id="network-submit-btn" class="w-full bg-primary text-white py-4 font-bold uppercase text-xs tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded shadow-lg mt-2">
-                    Request to Join
+                <button type="submit" id="network-submit-btn" class="w-full bg-primary text-white py-4 font-bold uppercase text-xs tracking-[0.2em] hover:bg-accent hover:text-primary transition-all rounded shadow-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Get Early Access
                 </button>
+
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-400 pt-1">
+                    <i data-lucide="lock" class="w-3 h-3"></i>
+                    <span>Your information is never shared publicly. We typically respond within 48 hours.</span>
+                </div>
+
                 <p id="network-form-status" class="text-center text-sm pt-2 hidden"></p>
             </form>
         </div>
@@ -261,10 +271,44 @@
         function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
         const networkForm = document.getElementById('network-form');
+
+        // Autofocus the first field when the join section scrolls into view
+        const nameInput = document.getElementById('network-name');
+        const joinSection = document.getElementById('join');
+        const focusObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    nameInput.focus({ preventScroll: true });
+                    focusObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.6 });
+        if (joinSection) focusObserver.observe(joinSection);
+
+        // Connector type pill selection
+        const connectorPills = document.querySelectorAll('.connector-pill');
+        const connectorInput = document.getElementById('connector_type');
+        connectorPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                connectorPills.forEach(p => {
+                    p.classList.remove('bg-primary', 'text-white', 'border-primary');
+                    p.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                });
+                pill.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                pill.classList.add('bg-primary', 'text-white', 'border-primary');
+                connectorInput.value = pill.dataset.value;
+            });
+        });
         const networkBtn = document.getElementById('network-submit-btn');
         const networkStatus = document.getElementById('network-form-status');
         networkForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            if (!connectorInput.value) {
+                networkStatus.innerText = 'Please select which describes you best above.';
+                networkStatus.className = 'text-center text-sm pt-2 text-red-600';
+                networkStatus.classList.remove('hidden');
+                return;
+            }
             networkBtn.disabled = true;
             networkBtn.innerText = 'Sending...';
             networkStatus.classList.add('hidden');
@@ -275,6 +319,11 @@
             }).then(function(response) {
                 if (response.ok) {
                     networkForm.reset();
+                    connectorInput.value = '';
+                    connectorPills.forEach(p => {
+                        p.classList.remove('bg-primary', 'text-white', 'border-primary');
+                        p.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    });
                     networkStatus.innerText = 'Thank you. We will review your details and reach out with next steps.';
                     networkStatus.className = 'text-center text-sm pt-2 text-primary font-medium';
                 } else {
