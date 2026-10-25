@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* Palette taken from the logo. */
+:root {
+  --navy: #1b3366;
+  --gold: #d4a437;
+  --cream: #fbf9ed;
+
+  --bg: #f6f2e3;
+  --surface: #fffdf6;
+  --ink: #14213d;
+  --muted: #4d5874;
+  --line: #ddd5bc;
+  --accent: var(--navy);
+  --accent-ink: #ffffff;
+  --accent-soft: #e6eaf3;
+  --focus: #b07f12;
+  --danger: #a3271a;
+  --danger-soft: #fbe9e5;
+  --success: #1f6b45;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c162d;
+    --surface: #13213f;
+    --ink: #f3efe0;
+    --muted: #b9bfd0;
+    --line: #2c3c63;
+    --accent: var(--gold);
+    --accent-ink: #13213f;
+    --accent-soft: #263457;
+    --focus: #f0c75e;
+    --danger: #ff9b8a;
+    --danger-soft: #3a1f24;
+    --success: #7fd3a4;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-focus: var(--focus);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+}
+
+html {
+  /* Keeps focused fields clear of the sticky progress bar. */
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
