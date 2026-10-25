@@ -1,8 +1,9 @@
 "use client";
 
+import { useSubmit } from "@formspree/react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Field, focusTargetId } from "@/components/fields";
-import { buildPlainText } from "@/lib/email";
+import { buildBody, buildPlainText, buildSubject } from "@/lib/email";
 import {
   COUNTED_QUESTIONS,
   FORM,
@@ -13,7 +14,11 @@ import {
   type Answers,
 } from "@/lib/form-config";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
-import { validateAnswers } from "@/lib/validate";
+import { emailFrom, validateAnswers } from "@/lib/validate";
+
+// Formspree form IDs are public by design; this one sends to the email set in
+// the Formspree dashboard.
+const FORMSPREE_FORM_ID = "maqbrpnz";
 
 const DRAFT_KEY = "homelink-feedback-draft-v1";
 
@@ -89,6 +94,7 @@ export default function FeedbackForm() {
   const sending = useRef(false);
   const honeypot = useRef<HTMLInputElement>(null);
   const successHeading = useRef<HTMLHeadingElement>(null);
+  const submitToFormspree = useSubmit<Record<string, string>>(FORMSPREE_FORM_ID);
 
   useEffect(() => {
     const draft = loadDraft();
@@ -150,28 +156,32 @@ export default function FeedbackForm() {
     setFailure("");
     setCopied("");
     try {
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          answers: result.answers,
-          [HONEYPOT_FIELD]: honeypot.current?.value ?? "",
-        }),
+      const replyTo = emailFrom(result.answers.contact);
+      const sent = await submitToFormspree({
+        _subject: buildSubject(result.answers),
+        message: buildBody(result.answers),
+        // Formspree uses an "email" field as the Reply-To address.
+        ...(replyTo ? { email: replyTo } : {}),
+        [HONEYPOT_FIELD]: honeypot.current?.value ?? "",
       });
-      const data = (await res.json().catch(() => null)) as {
-        ok?: boolean;
-        error?: string;
-        fieldErrors?: Record<string, string>;
-      } | null;
 
-      if (res.ok && data?.ok) {
+      if (sent.kind === "success") {
         clearDraft();
         setStatus("sent");
         return;
       }
+      const errs = [
+        ...sent.getFormErrors(),
+        ...sent.getAllFieldErrors().flatMap(([, fieldErrs]) => fieldErrs),
+      ];
+      console.error("Formspree rejected the submission", errs);
       setStatus("failed");
-      setFailure(data?.error ?? `Something went wrong on our side (error ${res.status}).`);
-      if (data?.fieldErrors) showErrors(data.fieldErrors);
+      // Formspree's own errors carry a code; network failures come back as UNSPECIFIED.
+      setFailure(
+        errs.some((err) => err.code !== "UNSPECIFIED")
+          ? `The form service said: ${errs.map((err) => err.message).join(" ")}`
+          : "We could not reach the form service. Check your internet connection.",
+      );
     } catch {
       setStatus("failed");
       setFailure("We could not connect. Check your internet connection.");
