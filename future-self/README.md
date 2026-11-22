@@ -27,6 +27,7 @@ src/engine/          pure calculation logic, no React
   allocate.ts        emergency allocation, water-filling and sequential pot allocation
   scenarios.ts       builds every scenario from one profile and plan (shared assumptions)
   delusion.ts        Delusion Meter score, sensitivities and gap-closing suggestions
+  aiPlanner.ts       self-tax planner: prompt for Claude, validation, engine evaluation, built-in fallback
   route.ts           personalised route and timeline
   gamification.ts    quests, XP and levels (actions only, never money)
   suggest.ts         suggested rates, allowances and plan (all labelled assumptions)
@@ -37,6 +38,10 @@ src/state/store.tsx  React context and localStorage persistence
 src/ui/              presentation only (views and components)
 docs/FORMULAS.md     documented formulas and timing
 ```
+
+## AI self-tax planner
+
+On the hosted page, the Self-tax screen's planner asks Claude to budget the month and propose self-tax rates and a payday set-aside. Claude checks its drafts with the app's own engine, the app validates the result, and the person applies it or not. Run locally, the planner falls back to a clearly labelled built-in rules-based planner.
 
 ## Tested acceptance cases (`src/engine/__tests__/engine.test.ts`)
 

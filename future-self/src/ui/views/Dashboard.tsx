@@ -5,6 +5,7 @@ import { useStore } from '../../state/store';
 import { Bar, Card, Stat, useMoney } from '../components/inputs';
 import { CharacterSvg, DreamScene } from '../components/Character';
 import { LineChart } from '../components/LineChart';
+import { AiPlanner } from '../components/AiPlanner';
 
 export function MeterGauge({ score }: { score: number | null }) {
   const band = scoreBand(score);
@@ -69,12 +70,14 @@ export function Dashboard({ go }: { go: (t: string) => void }) {
         </Card>
       </div>
 
+      <AiPlanner compact go={go} />
+
       <Card title="This month (forecast, month 1)" sub={`${prettyDate(start)} · simulated — no real money moves`} actions={<button className="link" onClick={() => go('math')}>Open the math →</button>}>
         <div className="stats">
           <Stat label="Take-home income" value={money(r1.income)} />
           <Stat label="Essentials + repayments" value={money(r1.essentials + r1.debtRepayments)} />
           <Stat label="Planned discretionary" value={money(r1.discretionary)} />
-          <Stat label="Self-tax (levy)" value={money(r1.levy)} note={r1.rebate ? `rebate ${money(r1.rebate)} returned` : undefined} />
+          <Stat label="Self-tax (levy + payday set-aside)" value={money(r1.levy)} note={r1.rebate ? `rebate ${money(r1.rebate)} returned` : undefined} />
           <Stat label="Unspent money swept" value={money(r1.sweep)} />
           <Stat label="Total into plan" value={money(r1.toPlan)} tone="good" note="levy − rebate + sweep (never double-counted)" />
         </div>

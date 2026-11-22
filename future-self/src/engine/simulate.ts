@@ -75,6 +75,8 @@ export interface EngineInput {
   spending: CategoryMap<Pence>;
   /** null = no self-tax. */
   rules: Rules | null;
+  /** Fixed monthly self-tax moved on payday (set by the person or the AI planner). 0 = none. */
+  fixedSetAside?: Pence;
   contribution: { mode: 'sweep' } | { mode: 'manual'; ceiling: Pence };
   emergency: EmergencyConfig;
   pots: PotInput[];
@@ -282,8 +284,10 @@ export function simulate(input: EngineInput): EngineResult {
     const available = Math.max(0, Math.min(surplus, cash));
 
     // 5. self-tax and sweep / manual transfer
-    const cap = input.contribution.mode === 'sweep' ? available : Math.min(Math.max(0, input.contribution.ceiling), available);
-    const tax = computeSelfTax(spending, input.rules, cap);
+    const fixed = Math.max(0, input.fixedSetAside ?? 0);
+    // Manual mode: the ceiling caps transfers, but a committed payday set-aside is always honoured (if cash allows).
+    const cap = input.contribution.mode === 'sweep' ? available : Math.min(Math.max(0, input.contribution.ceiling, fixed), available);
+    const tax = computeSelfTax(spending, input.rules, cap, fixed);
     const sweep = cap - tax.levy;
     const toPlan = cap - tax.rebate; // = levy − rebate + sweep; the rebate stays as spendable cash
     cash -= toPlan;

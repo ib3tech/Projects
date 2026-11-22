@@ -2,7 +2,7 @@ import { toPence } from './money';
 import { AppState, dateOfMonth, Profile } from './profile';
 import { suggestPlan } from './suggest';
 
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 let idc = 0;
 export const uid = (p = 'id') => `${p}-${Date.now().toString(36)}-${(idc++).toString(36)}`;
@@ -60,6 +60,7 @@ export function emptyState(start = thisMonth()): AppState {
     milestones: [],
     game: { xpEvents: [], checkIns: [], questsDone: [] },
     provenance: {},
+    planner: { proposal: null, appliedAt: null },
   };
 }
 
@@ -104,4 +105,16 @@ export function demoState(start = thisMonth()): AppState {
   s.isDemo = true;
   s.account = { name: 'Demo', email: 'demo@example.invalid', createdAt: new Date().toISOString() };
   return s;
+}
+
+/** Upgrade a stored state from an older version instead of discarding the user's answers. */
+export function migrate(raw: unknown): AppState | null {
+  const s = raw as AppState & { version?: number };
+  if (!s || typeof s !== 'object' || !s.profile || !s.plan) return null;
+  if (s.version === 1) {
+    s.plan.fixedSetAside = { amount: 0, setBy: 'you' };
+    s.planner = { proposal: null, appliedAt: null };
+    s.version = 2;
+  }
+  return s.version === STATE_VERSION ? s : null;
 }

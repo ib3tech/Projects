@@ -4,6 +4,7 @@ import { explainPurchase } from '../../engine/selfTax';
 import { suggestRules } from '../../engine/suggest';
 import { useStore } from '../../state/store';
 import { Card, Field, MoneyInput, PctInput, ProvTag, Seg, Toggle, useMoney } from '../components/inputs';
+import { AiPlanner, setByLabel } from '../components/AiPlanner';
 
 export function SelfTaxView() {
   const { state, model, update } = useStore();
@@ -21,6 +22,7 @@ export function SelfTaxView() {
 
   return (
     <div className="stack">
+      <AiPlanner />
       <Card title="Self-tax & the unspent-money sweep" sub="Self-tax is a voluntary transfer of your own existing money into your future plan. It is not income, not government tax, and not free money.">
         <div className="explain-flow">
           <div><span>Available after essentials</span><b>{money(availableAfterEssentials)}</b></div>
@@ -34,6 +36,9 @@ export function SelfTaxView() {
           Total = available − purchases − rebate = {money(r1.toPlan)}. The levy is part of that money, not added on top. With a full sweep, rates and allowances change <em>when</em> money is earmarked, not how much you save — only spending less creates more surplus.
           {r1.deficitRepaid > 0 && ` ${money(r1.deficitRepaid)} first cleared an earlier deficit.`}
         </p>
+        <Field label="Set aside on payday (fixed self-tax)" hint={`Moved at the start of the month so it can't be spent. Set by ${setByLabel(plan.fixedSetAside.setBy)}. With a full sweep it changes when money is earmarked, not the total.`}>
+          <MoneyInput value={plan.fixedSetAside.amount} onChange={(v) => update((d) => void (d.plan.fixedSetAside = { amount: v, setBy: 'you' }), { fixedSetAside: 'confirmed' })} />
+        </Field>
         <Toggle checked={plan.selfTaxEnabled} onChange={(v) => update((d) => void (d.plan.selfTaxEnabled = v))} label="Self-tax enabled" />
         <Field label="Transfer mode">
           <Seg

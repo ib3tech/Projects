@@ -125,6 +125,8 @@ export interface Plan {
   returns: { investmentAnnual: number; cashAnnual: number; deficitApr: number };
   calendar: CalendarAdjustment[];
   horizonYears: number;
+  /** Fixed monthly self-tax moved on payday — chosen by the person or proposed by the AI planner. */
+  fixedSetAside: { amount: Pence; setBy: 'you' | 'ai' | 'built-in' };
 }
 
 export interface Gamification {
@@ -146,6 +148,8 @@ export interface AppState {
   game: Gamification;
   /** Field path → provenance. */
   provenance: Record<string, Provenance>;
+  /** Latest budget proposal from the AI (or built-in) planner, kept until applied or dismissed. */
+  planner: { proposal: import('./aiPlanner').PlannerProposal | null; appliedAt: string | null };
 }
 
 /** Months between two 'YYYY-MM' strings: monthIndex(start, start) = 1 (first projected month). */

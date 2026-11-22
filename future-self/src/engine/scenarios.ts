@@ -104,6 +104,7 @@ export function buildInput(s: AppState, id: ScenarioId): EngineInput {
     ...base,
     spending: planned,
     rules: rulesFor(plan),
+    fixedSetAside: plan.selfTaxEnabled ? Math.max(0, plan.fixedSetAside?.amount ?? 0) : 0,
     contribution: plan.contribution,
   };
   const totalPotOpening = Object.values(opening.pots).reduce((a, b) => a + b, 0);

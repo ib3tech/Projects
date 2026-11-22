@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { emptyState, STATE_VERSION } from '../engine/defaults';
+import { emptyState, migrate } from '../engine/defaults';
 import { buildModel, Model } from '../engine/model';
 import { AppState, Provenance } from '../engine/profile';
 
@@ -9,8 +9,8 @@ function load(): AppState {
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) {
-      const s = JSON.parse(raw) as AppState;
-      if (s.version === STATE_VERSION) return s;
+      const s = migrate(JSON.parse(raw));
+      if (s) return s;
     }
   } catch {
     /* storage unavailable */

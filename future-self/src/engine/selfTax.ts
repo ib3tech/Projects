@@ -39,10 +39,11 @@ export interface SelfTaxResult {
  * Self-tax for one month.
  *  levy_c   = round(max(0, spend_c − allowance_c) × rate_c)   for rate_c > 0
  *  rebate_c = round(max(0, spend_c − allowance_c) × |rate_c|) for rate_c < 0 (charity, |rate| ≤ 5%)
- *  levy     = min(Σ levy_c, available)        — never overdraws
+ *  fixed    = a payday set-aside chosen by the person or the AI planner (also self-tax)
+ *  levy     = min(Σ levy_c + fixed, available) — never overdraws
  *  rebate   = min(Σ rebate_c, levy)           — funded only from positive levies
  */
-export function computeSelfTax(spending: CategoryMap<Pence>, rules: Rules | null, available: Pence): SelfTaxResult {
+export function computeSelfTax(spending: CategoryMap<Pence>, rules: Rules | null, available: Pence, fixedSetAside: Pence = 0): SelfTaxResult {
   const lines: CategoryLevy[] = [];
   if (rules) {
     for (const [id, spendRaw] of Object.entries(spending) as [CategoryId, Pence][]) {
@@ -57,7 +58,7 @@ export function computeSelfTax(spending: CategoryMap<Pence>, rules: Rules | null
       lines.push({ id, spend, allowance, taxable, rate, amount });
     }
   }
-  const levyRequested = sum(lines.filter((l) => l.amount > 0).map((l) => l.amount));
+  const levyRequested = sum(lines.filter((l) => l.amount > 0).map((l) => l.amount)) + Math.max(0, fixedSetAside);
   const rebateRequested = -sum(lines.filter((l) => l.amount < 0).map((l) => l.amount));
   const levy = Math.max(0, Math.min(levyRequested, available));
   const rebate = Math.min(rebateRequested, levy);

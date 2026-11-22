@@ -61,6 +61,7 @@ export function suggestPlan(p: Profile): Plan {
     returns: { investmentAnnual: RISK_RETURNS[p.preferences.risk], cashAnnual: 0.02, deficitApr: 0.2 },
     calendar: [],
     horizonYears: 15,
+    fixedSetAside: { amount: 0, setBy: 'you' },
   };
 }
 

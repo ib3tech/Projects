@@ -305,3 +305,14 @@ table.rules td:first-child { min-width: 150px; }
 .ms-edit { display: grid; gap: 6px; grid-template-columns: 1fr; background: var(--surface-2); padding: 10px; border-radius: 12px; }
 @media (min-width: 760px) { .ms-edit { grid-template-columns: 2fr 1.2fr 1fr 1fr auto auto; align-items: center; } }
 .foot { margin-top: 30px; text-align: center; }
+
+.ai-pill { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; border-radius: 999px; padding: 2px 8px; vertical-align: middle; margin-left: 6px; }
+.ai-pill.available { background: var(--brand-soft); color: var(--brand); }
+.ai-pill.unavailable, .ai-pill.checking { background: var(--surface-2); color: var(--muted); }
+.thinking { color: var(--text-2); font-weight: 600; }
+.thinking::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--brand); margin-right: 8px; animation: pulse 1s ease-in-out infinite; vertical-align: middle; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .thinking::before { animation: none; } }
+.proposal { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.proposal h4 { margin: 6px 0 0; }
+.compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }

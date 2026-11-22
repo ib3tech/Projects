@@ -83,3 +83,12 @@ Every line shares the same starting balances, emergency settings, spending, take
 | Spending the money | The emergency share is still saved; the rest is spent |
 
 The following are **not modelled**: inflation, fees, taxes on returns, currency effects, and changes in future living costs.
+
+## Self-tax planner (AI or built-in)
+
+- The person's data is sent to Claude (only on the hosted page, on the viewer's own Claude account and with their consent) together with the app's rules. Claude returns a monthly budget, self-tax rates and allowances, a payday set-aside and a transfer mode, with reasons for each.
+- Claude can call `evaluate_plan`, which runs a draft through this engine, so it refines its draft against real results instead of inventing figures.
+- `parseProposal` validates everything Claude returns: it cannot raise spending, cut protected categories, touch essentials or internal categories, or exceed the −5%…100% rate range, and the payday set-aside is capped at the money actually left (no overdraft). Every change it makes is shown to the person.
+- Before/after figures shown to the person come only from `simulate()`. Nothing changes until the person applies the proposal; afterwards the values are tagged as assumptions, and the set-aside records who set it (you / AI / built-in).
+- Payday set-aside (`fixed`) counts as self-tax: `levy = min(Σ levy_c + fixed, cap)`. With a full sweep it changes when money is earmarked, not the total. In manual mode `cap = min(max(ceiling, fixed), available)`.
+- When AI is unavailable (running locally, consent declined, no access), a deterministic built-in planner is used and labelled as such.
