@@ -1,135 +1,74 @@
 import { useEffect, useState } from 'react';
-import { emptyState } from '../engine/defaults';
 import { useStore } from '../state/store';
-import { CareerView } from './views/CareerView';
-import { CompareView } from './views/CompareView';
-import { Dashboard } from './views/Dashboard';
-import { MathView } from './views/MathView';
-import { MeterView } from './views/MeterView';
-import { Questionnaire, SignUp } from './views/Onboarding';
-import { PotsView } from './views/PotsView';
-import { RouteView } from './views/RouteView';
-import { SelfTaxView } from './views/SelfTaxView';
-import { SettingsView } from './views/SettingsView';
-import { YouView } from './views/YouView';
+import { Landing, Onboarding } from './Onboarding';
+import { NAV, NavId, PageHead, Shell } from './Shell';
+import { Career } from './views/Career';
+import { Compare } from './views/Compare';
+import { MathView } from './views/Math';
+import { Meter } from './views/Meter';
+import { Overview } from './views/Overview';
+import { Pots } from './views/Pots';
+import { Route } from './views/Route';
+import { Settings } from './views/Settings';
+import { Spending } from './views/Spending';
+import { You } from './views/You';
 
-const TABS = [
-  { id: 'home', label: 'Home', icon: '⌂', main: true },
-  { id: 'route', label: 'Route', icon: '↗', main: true },
-  { id: 'meter', label: 'Delusion Meter', icon: '◐', main: true },
-  { id: 'selftax', label: 'Self-tax', icon: '％', main: true },
-  { id: 'pots', label: 'Pots', icon: '◫' },
-  { id: 'career', label: 'Career', icon: '⚑' },
-  { id: 'compare', label: 'Compare', icon: '≋' },
-  { id: 'math', label: 'Open the math', icon: '∑' },
-  { id: 'you', label: 'You & quests', icon: '☺', main: true },
-  { id: 'assumptions', label: 'Settings', icon: '⚙' },
-];
+const fromHash = (): NavId => {
+  const h = location.hash.slice(1);
+  return (NAV.some((n) => n.id === h) ? h : 'overview') as NavId;
+};
 
 export function App() {
   const { state, replace } = useStore();
-  const [tab, setTab] = useState(() => location.hash.slice(1) || 'home');
-  const [editing, setEditing] = useState(false);
-  const [more, setMore] = useState(false);
+  const [tab, setTab] = useState<NavId>(fromHash);
+  const [mode, setMode] = useState<'landing' | 'onboarding' | 'app'>(state.onboarded ? 'app' : 'landing');
   useEffect(() => {
-    const on = () => setTab(location.hash.slice(1) || 'home');
+    const on = () => setTab(fromHash());
     addEventListener('hashchange', on);
     return () => removeEventListener('hashchange', on);
   }, []);
-  const go = (t: string) => {
+  useEffect(() => {
+    if (state.onboarded && mode === 'landing') setMode('app');
+    if (!state.onboarded && mode === 'app') setMode('landing');
+  }, [state.onboarded, mode]);
+  const go = (t: NavId) => {
     location.hash = t;
     setTab(t);
-    setMore(false);
     window.scrollTo({ top: 0 });
   };
+  const edit = () => { setMode('onboarding'); window.scrollTo({ top: 0 }); };
 
-  const banner = (
-    <div className="sim-banner" role="note">
-      Prototype · all accounts, balances, achievements and transfers are <b>simulated</b> · no bank connection
-      {state.isDemo && (
-        <>
-          {' · '}
-          <b>Fictional demo persona</b> — not real data{' '}
-          <button className="link" onClick={() => replace(emptyState())}>
-            Start my own
-          </button>
-        </>
-      )}
+  const demoBar = state.isDemo && mode === 'app' && (
+    <div className="bg-forest px-4 py-1.5 text-center text-xs text-white/90">
+      Fictional example — not real data.{' '}
+      <button className="font-semibold text-sun underline" onClick={() => { replace({ ...state, isDemo: false, onboarded: false, account: null }); setMode('landing'); }}>Start my own plan</button>
     </div>
   );
 
-  if (!state.account) return <>{banner}<SignUp /></>;
-  if (!state.onboarded || editing)
-    return (
-      <>
-        {banner}
-        {editing && (
-          <div className="center pad">
-            <button className="btn ghost small" onClick={() => setEditing(false)}>← Back to the app</button>
-          </div>
-        )}
-        <Questionnaire onDone={() => setEditing(false)} />
-      </>
-    );
+  if (mode === 'landing') return <Landing onStart={() => setMode('onboarding')} />;
+  if (mode === 'onboarding') return <Onboarding onExit={() => setMode(state.onboarded ? 'app' : 'landing')} />;
 
   const view = (() => {
     switch (tab) {
-      case 'route': return <RouteView go={go} />;
-      case 'meter': return <MeterView />;
-      case 'selftax': return <SelfTaxView />;
-      case 'pots': return <PotsView />;
-      case 'career': return <CareerView />;
-      case 'compare': return <CompareView />;
+      case 'route': return <Route go={go} />;
+      case 'spending': return <Spending />;
+      case 'meter': return <Meter />;
+      case 'pots': return <Pots />;
+      case 'career': return <Career />;
+      case 'compare': return <Compare />;
       case 'math': return <MathView />;
-      case 'you': return <YouView />;
-      case 'assumptions': return <SettingsView editProfile={() => setEditing(true)} />;
-      default: return <Dashboard go={go} />;
+      case 'you': return <You />;
+      case 'assumptions': return <Settings onEdit={edit} />;
+      default: return <Overview go={go} />;
     }
   })();
-  const current = TABS.find((t) => t.id === tab) ?? TABS[0];
-
   return (
-    <div className="app">
-      {banner}
-      <div className="layout">
-        <nav className="side-nav" aria-label="Main">
-          <div className="brand"><span className="logo-mark sm" aria-hidden>FS</span> Future Self</div>
-          {TABS.map((t) => (
-            <button key={t.id} className={t.id === tab ? 'on' : ''} aria-current={t.id === tab ? 'page' : undefined} onClick={() => go(t.id)}>
-              <span className="ico" aria-hidden>{t.icon}</span>
-              {t.label}
-            </button>
-          ))}
-        </nav>
-        <main>
-          <header className="page-head">
-            <h2>{current.id === 'home' ? `Hello${state.profile.name ? ', ' + state.profile.name : ''}` : current.label}</h2>
-          </header>
-          {view}
-          <footer className="foot small muted">Future Self prototype · forecasts are illustrations built on your assumptions, not advice or guarantees.</footer>
-        </main>
-      </div>
-      <nav className="bottom-nav" aria-label="Main (mobile)">
-        {TABS.filter((t) => t.main).map((t) => (
-          <button key={t.id} className={t.id === tab ? 'on' : ''} onClick={() => go(t.id)} aria-current={t.id === tab ? 'page' : undefined}>
-            <span className="ico" aria-hidden>{t.icon}</span>
-            <span>{t.id === 'meter' ? 'Meter' : t.id === 'you' ? 'You' : t.label}</span>
-          </button>
-        ))}
-        <button className={more || !current.main ? 'on' : ''} onClick={() => setMore((m) => !m)} aria-expanded={more}>
-          <span className="ico" aria-hidden>⋯</span>
-          <span>More</span>
-        </button>
-      </nav>
-      {more && (
-        <div className="more-sheet" role="dialog" aria-label="More sections">
-          {TABS.filter((t) => !t.main).map((t) => (
-            <button key={t.id} onClick={() => go(t.id)}>
-              <span className="ico" aria-hidden>{t.icon}</span> {t.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      {demoBar}
+      <Shell tab={tab} go={go} onEdit={edit}>
+        <PageHead tab={tab} onEdit={edit} />
+        {view}
+      </Shell>
+    </>
   );
 }

@@ -131,7 +131,8 @@ describe('stored data migration', () => {
     delete old.planner;
     delete old.plan.fixedSetAside;
     const m = migrate(old)!;
-    expect(m.version).toBe(2);
+    expect(m.version).toBe(3);
+    expect(m.character.hairStyle).toBeDefined();
     expect(m.plan.fixedSetAside.amount).toBe(0);
     expect(m.profile.takeHome).toBe(old.profile.takeHome);
   });

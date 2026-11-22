@@ -2,7 +2,7 @@ import { toPence } from './money';
 import { AppState, dateOfMonth, Profile } from './profile';
 import { suggestPlan } from './suggest';
 
-export const STATE_VERSION = 2;
+export const STATE_VERSION = 3;
 
 let idc = 0;
 export const uid = (p = 'id') => `${p}-${Date.now().toString(36)}-${(idc++).toString(36)}`;
@@ -55,7 +55,7 @@ export function emptyState(start = thisMonth()): AppState {
     isDemo: false,
     profile,
     plan: suggestPlan(profile),
-    character: { gender: 'female', skin: '#b07a52', hair: '#2b1d14', outfit: '#2f6f4f', accent: '#e0b84f', headwear: 'none' },
+    character: { gender: 'female', skin: '#e8a978', hair: '#1f1f1f', hairStyle: 'long', outfit: '#2b47b9', accent: '#d9ce9f', headwear: 'none', glasses: false },
     dream: { title: '', description: '', theme: 'home', imageDataUrl: null },
     milestones: [],
     game: { xpEvents: [], checkIns: [], questsDone: [] },
@@ -115,6 +115,10 @@ export function migrate(raw: unknown): AppState | null {
     s.plan.fixedSetAside = { amount: 0, setBy: 'you' };
     s.planner = { proposal: null, appliedAt: null };
     s.version = 2;
+  }
+  if (s.version === 2) {
+    s.character = { ...s.character, hairStyle: s.character.gender === 'male' ? 'short' : 'long', glasses: false };
+    s.version = 3;
   }
   return s.version === STATE_VERSION ? s : null;
 }

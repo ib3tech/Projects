@@ -59,12 +59,15 @@ export interface Goal {
 }
 
 export interface Character {
-  gender: 'female' | 'male';
+  /** Pronoun-based presentation: female (she/her), male (he/him) or neutral (they/them). */
+  gender: 'female' | 'male' | 'neutral';
   skin: string;
   hair: string;
+  hairStyle: 'long' | 'bob' | 'bun' | 'short' | 'curly';
   outfit: string;
   accent: string;
   headwear: 'none' | 'scarf' | 'cap' | 'kufi';
+  glasses: boolean;
 }
 
 export interface Dream {

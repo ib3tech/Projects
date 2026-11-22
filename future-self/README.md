@@ -1,5 +1,7 @@
 # Future Self — prototype
 
+Stack: Vite + React + TypeScript, Tailwind CSS v4, Recharts, Lucide icons, Vitest.
+
 A personalised financial-planning web app. It turns money a person does not spend, voluntary "self-tax" and career
 development into progress toward that person's own goals.
 
@@ -35,7 +37,11 @@ src/engine/          pure calculation logic, no React
   profile.ts         domain types (profile, plan, goals, career stages)
   __tests__/         acceptance tests
 src/state/store.tsx  React context and localStorage persistence
-src/ui/              presentation only (views and components)
+src/ui/              presentation only — React + Tailwind CSS v4, Recharts charts, Lucide icons
+  Onboarding.tsx     landing page and 8-step questionnaire
+  Shell.tsx          sidebar / mobile nav and page header
+  views/             Overview, Route, Spending rules (AI planner), Delusion Meter, Pots, Career,
+                     Compare futures, Open the math, You & quests, Plan settings
 docs/FORMULAS.md     documented formulas and timing
 ```
 

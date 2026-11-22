@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* Future Self — forest & sage on paper. Single deliberate light look. */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-paper: #f6f8f4;
+  --color-mist: #eef3ed;
+  --color-line: #e3e8e2;
+  --color-ink: #293d33;
+  --color-forest: #294337;
+  --color-sage: #74a18a;
+  --color-sage-deep: #5d8a72;
+  --color-sage-soft: #e6efe8;
+  --color-hill: #80a58b;
+  --color-sun: #d9ce9f;
+  --color-muted: #6b7a72;
+  --color-faint: #9aa79f;
+  --color-amber: #d4a04a;
+  --color-amber-ink: #a8741f;
+  --color-rose: #c06060;
+  --color-violet: #8a7fd0;
+  --color-butter: #fef6c7;
+  --color-cream: #fffbeb;
+}
+
+@layer base {
+  html { color-scheme: light; }
+  body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { text-wrap: balance; }
+  input, select, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--color-sage-deep); outline-offset: 2px; }
+  input[type="checkbox"] { accent-color: var(--color-forest); }
+  input[type="range"] { accent-color: var(--color-forest); }
+}
+
+@utility eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.12em] text-muted; }
+@utility display { @apply font-black tracking-[-0.04em] leading-[0.95]; }
+@utility card { @apply rounded-2xl border border-line bg-white p-4 sm:p-5; }
+@utility input { @apply w-full min-w-0 rounded-xl border border-line bg-white px-3 py-2.5 text-[15px] outline-none transition focus:border-sage-deep focus:ring-2 focus:ring-sage-soft; }
+@utility btn { @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-[15px] font-medium transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer; }
+@utility btn-primary { @apply btn bg-ink text-white hover:bg-forest; }
+@utility btn-ghost { @apply btn border border-line bg-white text-ink hover:bg-mist; }
+@utility btn-soft { @apply btn bg-mist text-ink hover:bg-sage-soft; }
+@utility btn-sm { @apply px-3 py-1.5 text-sm; }
+@utility chip { @apply rounded-xl border border-line bg-white px-3.5 py-2 text-[15px] text-ink/80 transition hover:bg-mist cursor-pointer; }
+@utility chip-on { @apply border-sage bg-sage-soft text-ink font-medium; }
+@utility num { font-variant-numeric: tabular-nums; }
+@utility table-data { @apply w-full border-collapse text-sm num; }
+
+@layer components {
+  .table-data th { @apply border-b border-line px-2 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-muted whitespace-nowrap; }
+  .table-data td { @apply border-b border-line/70 px-2 py-2 align-top; }
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

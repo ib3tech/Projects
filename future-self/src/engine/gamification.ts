@@ -17,6 +17,7 @@ export const QUESTS: Quest[] = [
   { id: 'questionnaire', title: 'Map where you are now', why: 'A plan starts from your real situation.', xp: 50, check: (s) => s.onboarded },
   { id: 'essentials', title: 'List your essential costs', why: 'Protecting essentials keeps the plan safe.', xp: 30, check: (s) => s.profile.essentials.length > 0 },
   { id: 'threeGoals', title: 'Describe what each goal means to you', why: 'Clear meaning makes trade-offs easier.', xp: 40, check: (s) => s.profile.goals.every((g) => g.meaning.trim().length > 0) },
+  { id: 'meter', title: 'Open the Delusion Meter', why: 'Seeing the gap honestly is the first step.', xp: 10 },
   { id: 'allowance', title: 'Set a tax-free allowance', why: 'Allowances keep enjoyment in the plan.', xp: 20, check: (s) => Object.values(s.plan.rules).some((r) => (r?.allowance ?? 0) > 0) },
   { id: 'emergency', title: 'Choose an emergency-fund priority', why: 'A buffer protects every other goal.', xp: 20, check: (s) => s.plan.emergency.target > 0 },
   { id: 'careerStage', title: 'Define a career stage and its conditions', why: 'Earning capacity is built by actions, not assumed.', xp: 40, check: (s) => s.profile.careerStages.some((c) => c.conditions.length > 0) },
