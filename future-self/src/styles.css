@@ -110,7 +110,7 @@ input[type='range'] { padding: 0; accent-color: var(--brand); }
 .link { background: none; border: 0; color: var(--brand); font: inherit; font-weight: 600; cursor: pointer; padding: 0; }
 .icon-btn { background: none; border: 1px solid var(--line); color: var(--muted); border-radius: 50%; width: 32px; height: 32px; flex: none; cursor: pointer; font-size: 18px; line-height: 1; }
 
-.sim-banner { background: #20302a; color: #e8f1ec; font-size: 0.78rem; padding: 6px 14px; text-align: center; position: sticky; top: 0; z-index: 30; }
+.sim-banner { background: #20302a; color: #e8f1ec; font-size: 0.78rem; padding: 6px 14px; text-align: center; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; }
 .sim-banner .link { color: #9fe0bd; }
 .sim-badge { font-size: 0.7rem; background: var(--warn-soft); color: var(--warn); border-radius: 999px; padding: 1px 8px; font-weight: 700; }
 

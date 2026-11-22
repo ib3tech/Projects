@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { thisMonth } from '../../engine/defaults';
 import { levelOf, QUESTS, questDone, streak, totalXp } from '../../engine/gamification';
 import { prettyDate } from '../../engine/profile';
@@ -33,12 +34,14 @@ export function YouView() {
   ];
   const forecastHits = model.results.plan.events.filter((e) => e.type === 'potFirstHit' || e.type === 'emergencyComplete' || e.type === 'stageFunded');
 
+  const [uploadMsg, setUploadMsg] = useState('');
   const onUpload = (f: File | undefined) => {
     if (!f) return;
     if (f.size > 1.5e6) {
-      alert('Please choose an image under 1.5 MB (it is stored only in this browser).');
+      setUploadMsg('That image is over 1.5 MB. Please choose a smaller one (it is stored only in this browser).');
       return;
     }
+    setUploadMsg('');
     const r = new FileReader();
     r.onload = () => update((d) => void (d.dream.imageDataUrl = String(r.result)));
     r.readAsDataURL(f);
@@ -102,6 +105,7 @@ export function YouView() {
           </label>
           {state.dream.imageDataUrl && <button className="btn ghost small" onClick={() => update((d) => void (d.dream.imageDataUrl = null))}>Use drawn scene</button>}
         </div>
+        {uploadMsg && <p className="notice warn small">{uploadMsg}</p>}
         <p className="small muted">The scene gains detail as you level up through real actions — not as balances grow.</p>
       </Card>
 

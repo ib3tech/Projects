@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { emptyState, uid } from '../../engine/defaults';
 import { suggestPlan } from '../../engine/suggest';
 import { useStore } from '../../state/store';
@@ -9,13 +10,18 @@ export function SettingsView({ editProfile }: { editProfile: () => void }) {
   const r = state.plan.returns;
   const prov = Object.entries(state.provenance);
 
-  const exportJson = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'future-self-simulated-plan.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [showJson, setShowJson] = useState(false);
+  const [copied, setCopied] = useState('');
+  const json = JSON.stringify(state, null, 2);
+  const copyJson = async () => {
+    setShowJson(true);
+    try {
+      await navigator.clipboard.writeText(json);
+      setCopied('Copied to clipboard.');
+    } catch {
+      setCopied('Copy is blocked here — select the text below and copy it.');
+    }
   };
 
   return (
@@ -81,9 +87,19 @@ export function SettingsView({ editProfile }: { editProfile: () => void }) {
       <Card title="Data">
         <p className="notice">Everything is simulated and stored only in this browser's local storage. No bank connection, no real accounts, no real transfers.</p>
         <div className="row wrap">
-          <button className="btn ghost" onClick={exportJson}>Export my plan (JSON)</button>
-          <button className="btn danger" onClick={() => confirm('Delete everything and start again?') && replace(emptyState())}>Reset everything</button>
+          <button className="btn ghost" onClick={copyJson}>Copy my plan (JSON)</button>
+          {confirmReset ? (
+            <>
+              <span className="small">Delete everything in this browser and start again?</span>
+              <button className="btn danger" onClick={() => { replace(emptyState()); setConfirmReset(false); }}>Yes, delete</button>
+              <button className="btn ghost" onClick={() => setConfirmReset(false)}>Cancel</button>
+            </>
+          ) : (
+            <button className="btn danger" onClick={() => setConfirmReset(true)}>Reset everything</button>
+          )}
         </div>
+        {copied && <p className="small muted">{copied}</p>}
+        {showJson && <textarea id="plan-json" readOnly rows={8} value={json} onFocus={(e) => e.currentTarget.select()} />}
       </Card>
     </div>
   );

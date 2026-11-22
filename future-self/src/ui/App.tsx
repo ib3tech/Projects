@@ -23,7 +23,7 @@ const TABS = [
   { id: 'compare', label: 'Compare', icon: '≋' },
   { id: 'math', label: 'Open the math', icon: '∑' },
   { id: 'you', label: 'You & quests', icon: '☺', main: true },
-  { id: 'settings', label: 'Settings', icon: '⚙' },
+  { id: 'assumptions', label: 'Settings', icon: '⚙' },
 ];
 
 export function App() {
@@ -82,7 +82,7 @@ export function App() {
       case 'compare': return <CompareView />;
       case 'math': return <MathView />;
       case 'you': return <YouView />;
-      case 'settings': return <SettingsView editProfile={() => setEditing(true)} />;
+      case 'assumptions': return <SettingsView editProfile={() => setEditing(true)} />;
       default: return <Dashboard go={go} />;
     }
   })();
